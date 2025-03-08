@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 
 public class VMAT_InputManager : MonoBehaviour
 {
@@ -23,11 +27,12 @@ public class VMAT_InputManager : MonoBehaviour
     private InputAction secondaryButtonAction;
     private InputAction joystickAction;
 
+    private List<MonoBehaviour> disabledWithMenu = new List<MonoBehaviour>();
+    private List<bool> disabledWithMenuLastState = new List<bool>();
+
     private float joystickButtonThreshold = 0.5f;
     private bool joystickUpPressed = false;
     private bool joystickDownPressed = false;
-    private bool joystickLeftPressed = false;
-    private bool joystickRightPressed = false;
 
     private bool accessibilityMenuShown = false;
 
@@ -55,6 +60,13 @@ public class VMAT_InputManager : MonoBehaviour
         primaryButtonAction = actionMap.FindAction("PrimaryButton");
         secondaryButtonAction = actionMap.FindAction("SecondaryButton");
         joystickAction = actionMap.FindAction("Joystick");
+
+        MonoBehaviour[] locoProviders = FindObjectsOfType<LocomotionProvider>();
+        foreach (MonoBehaviour provider in locoProviders)
+        {
+            disabledWithMenu.Add(provider);
+            disabledWithMenuLastState.Add(provider.enabled);
+        }
 
         accessibilityMenu.gameObject.SetActive(false);
     }
@@ -120,6 +132,15 @@ public class VMAT_InputManager : MonoBehaviour
             accessibilityMenu.StopNavigatingMenu();
             accessibilityMenu.gameObject.SetActive(false);
             currentlyNavigatedMenu = pendingNavigatedMenu;
+
+            if (currentlyNavigatedMenu == null)
+            {
+                // Re-enable locomoters, if pertinent (set to their last state before menu opening)
+                for (int i = 0; i < disabledWithMenu.Count; i++)
+                {
+                    disabledWithMenu[i].enabled = disabledWithMenuLastState[i];
+                }
+            }
         }
         // If main accessibility menu is not shown, show it
         // Save currently navigated menu into pending, in case we need to go back to it
@@ -130,6 +151,11 @@ public class VMAT_InputManager : MonoBehaviour
             accessibilityMenu.StartNavigatingMenu();
             pendingNavigatedMenu = currentlyNavigatedMenu;
             currentlyNavigatedMenu = accessibilityMenu;
+
+            for (int i = 0; i < disabledWithMenu.Count; i++) {
+                disabledWithMenuLastState[i] = disabledWithMenu[i].enabled;
+                disabledWithMenu[i].enabled = false;
+            }
         }
     }
 
