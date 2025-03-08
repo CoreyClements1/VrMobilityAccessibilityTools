@@ -46,7 +46,7 @@ public class Spider : MonoBehaviour
         while (!dead)
         {
             Vector3 randPos = startPos + Vector3.right * Random.Range(-.2f, .2f) + Vector3.forward * Random.Range(-.2f, .2f);
-            float moveTime = Mathf.Abs((randPos - transform.position).magnitude) / 2f;
+            float moveTime = Mathf.Abs((randPos - transform.position).magnitude) / .5f;
             transform.LeanMove(randPos, moveTime).setEaseOutQuad();
 
             spiderAnimator.SetBool("Walking", true);

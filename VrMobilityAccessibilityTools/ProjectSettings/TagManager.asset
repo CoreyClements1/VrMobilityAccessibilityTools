@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Anchor
   - Whacker
+  - Cannon
   layers:
   - Default
   - TransparentFX
