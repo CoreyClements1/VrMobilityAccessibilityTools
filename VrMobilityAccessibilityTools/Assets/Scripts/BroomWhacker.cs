@@ -13,8 +13,9 @@ public class BroomWhacker : MonoBehaviour
 
     [SerializeField] private Rigidbody broomRb;
     [SerializeField] private ParticleSystem sweepParticles;
-    private bool overlapped = false;
     private Vector3 prevPos, velocity;
+
+    private List<GameObject> overlapped = new List<GameObject>();
 
 
     #endregion
@@ -56,7 +57,7 @@ public class BroomWhacker : MonoBehaviour
 
     private void CheckForSweep()
     {
-        if (overlapped)
+        if (overlapped.Count > 0)
         {
             if (Mathf.Abs(velocity.magnitude) > .1f)
             {
@@ -83,13 +84,19 @@ public class BroomWhacker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        overlapped = true;
+        if (!overlapped.Contains(other.gameObject))
+        {
+            overlapped.Add(other.gameObject);
+        }
     }
 
 
     private void OnTriggerExit(Collider other)
     {
-        overlapped = false;
+        if (overlapped.Contains(other.gameObject))
+        {
+            overlapped.Remove(other.gameObject);
+        }
     }
 
 
