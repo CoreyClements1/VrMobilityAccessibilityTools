@@ -15,10 +15,12 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
 
 
     private List<VMAT_HandController> handControllers = new List<VMAT_HandController>();
+    private VMAT_HeightAdjuster heightAdjuster;
 
     [SerializeField] private Toggle reachExtensionEnabledToggle;
     [SerializeField] private Slider reachExtensionAmtSlider;
     [SerializeField] private TMP_Text reachExtensionAmtText;
+    [SerializeField] private Slider heightAdjustSlider;
 
 
     #endregion
@@ -32,6 +34,8 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
         // Get all hand controllers
         foreach (GameObject root in SceneManager.GetActiveScene().GetRootGameObjects())
             handControllers.AddRange(root.GetComponentsInChildren<VMAT_HandController>(true));
+
+        heightAdjuster = FindObjectOfType<VMAT_HeightAdjuster>(true);
     }
 
 
@@ -41,6 +45,7 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
         OnReachExtensionEnabledChange();
         OnReachExtensionAmtChange();
         OnResetReachExtensionOrigin();
+        OnHeightAdjustChange();
     }
 
 
@@ -80,6 +85,19 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
         {
             handController.ResetReachExtensionOrigin();
         }
+    }
+
+
+    #endregion
+
+
+    #region OTHER
+
+
+    // Adjusts height
+    public void OnHeightAdjustChange()
+    {
+        heightAdjuster.SetHeightScale(heightAdjustSlider.value);
     }
 
 

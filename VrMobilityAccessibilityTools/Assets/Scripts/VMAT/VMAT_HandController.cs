@@ -12,7 +12,6 @@ public class VMAT_HandController : MonoBehaviour
     #region VARIABLES
 
 
-    private Transform controllerTransform;
     private Transform offsetTransform;
     private Vector3 originPositionLocal;
 
@@ -50,14 +49,12 @@ public class VMAT_HandController : MonoBehaviour
     // Spawn offset object and set all child objects to be parented to it
     private void SetupOffset()
     {
-        controllerTransform = transform;
-
         offsetTransform = new GameObject("VMAT Controller Offset").transform;
-        offsetTransform.SetParent(controllerTransform.parent);
-        offsetTransform.localPosition = controllerTransform.localPosition;
+        offsetTransform.SetParent(transform.parent);
+        offsetTransform.localPosition = transform.localPosition;
 
         List<Transform> children = new List<Transform>();
-        foreach (Transform child in controllerTransform)
+        foreach (Transform child in transform)
             children.Add(child);
 
         for (int i = children.Count - 1; i >= 0; i--)
@@ -68,27 +65,30 @@ public class VMAT_HandController : MonoBehaviour
     // Handles reach extension by using offsets
     private void HandleReachExtension()
     {
-        Vector3 offset = controllerTransform.localPosition - originPositionLocal;
+        if (transform == null)
+            return;
+
+        Vector3 offset = transform.localPosition - originPositionLocal;
         offsetTransform.localPosition = originPositionLocal + reachExtensionScale * offset;
 
-        offsetTransform.localRotation = controllerTransform.localRotation;
-        offsetTransform.localScale = controllerTransform.localScale;
+        offsetTransform.localRotation = transform.localRotation;
+        offsetTransform.localScale = transform.localScale;
     }
 
 
     // Handles directly tracking the controller (no reach extension)
     private void HandleTrackController()
     {
-        offsetTransform.localPosition = controllerTransform.localPosition;
-        offsetTransform.localRotation = controllerTransform.localRotation;
-        offsetTransform.localScale = controllerTransform.localScale;
+        offsetTransform.localPosition = transform.localPosition;
+        offsetTransform.localRotation = transform.localRotation;
+        offsetTransform.localScale = transform.localScale;
     }
 
 
     // Resets the reach extension "origin" to the current controller position
     public void ResetReachExtensionOrigin()
     {
-        originPositionLocal = controllerTransform.localPosition;
+        originPositionLocal = transform.localPosition;
     }
 
 

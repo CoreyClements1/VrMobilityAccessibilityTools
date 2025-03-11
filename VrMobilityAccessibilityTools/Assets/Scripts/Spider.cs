@@ -87,7 +87,7 @@ public class Spider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Whacker") && !dead)
+        if ((other.CompareTag("Whacker") || other.CompareTag("Scooper")) && !dead)
         {
             StartCoroutine(Die());
         }
@@ -112,6 +112,7 @@ public class Spider : MonoBehaviour
         deathParticles.Play();
 
         Destroy(gameObject, 3f);
+        CompletionCanvas.Instance.OnObjDestroyed();
     }
 
 
