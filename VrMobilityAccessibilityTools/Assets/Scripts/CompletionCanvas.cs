@@ -35,10 +35,10 @@ public class CompletionCanvas : MonoBehaviour
             Destroy(gameObject);
         Instance = this;
 
-        //Grass[] grasses = FindObjectsOfType<Grass>();
+        Grass[] grasses = FindObjectsOfType<Grass>();
         Spider[] spiders = FindObjectsOfType<Spider>();
 
-        totalObjs = spiders.Length;
+        totalObjs = spiders.Length + grasses.Length;
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;

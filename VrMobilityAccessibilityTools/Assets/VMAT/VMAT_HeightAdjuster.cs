@@ -13,21 +13,8 @@ public class VMAT_HeightAdjuster : MonoBehaviour
     #region VARIABLES
 
 
-    [SerializeField] private Transform offsetTest;
     private float baseHeight;
     private float heightScale = 1f;
-
-
-    #endregion
-
-
-    #region MONOBEHAVIOUR AND SETUP
-
-
-    private void Awake()
-    {
-        
-    }
 
 
     #endregion
@@ -40,7 +27,7 @@ public class VMAT_HeightAdjuster : MonoBehaviour
     public void SetHeightScale(float heightScale)
     {
         this.heightScale = heightScale;
-        offsetTest.localPosition = Vector3.up * (heightScale - 0.5f);
+        transform.localPosition = Vector3.up * (heightScale - 0.5f);
     }
 
 

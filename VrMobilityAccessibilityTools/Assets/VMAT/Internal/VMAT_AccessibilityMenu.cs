@@ -41,6 +41,8 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
 
     private void Start()
     {
+        gameObject.SetActive(true);
+
         // Ping all values
         OnReachExtensionEnabledChange();
         OnReachExtensionAmtChange();
