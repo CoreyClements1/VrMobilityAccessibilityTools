@@ -87,7 +87,32 @@ public class Spider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((other.CompareTag("Whacker") || other.CompareTag("Scooper")) && !dead)
+        if (!dead)
+        {
+            if (other.CompareTag("Projectile"))
+            {
+                StartCoroutine(Die());
+            }
+            else if (other.CompareTag("Whacker") || other.CompareTag("Scooper") || other.CompareTag("Chopper") || other.CompareTag("Breaker"))
+            {
+                TestVelocityAndDie(other);
+            }
+        }
+    }
+
+
+    private void TestVelocityAndDie(Collider other)
+    {
+        VelocityTracker vt = other.GetComponent<VelocityTracker>();
+        if (vt == null)
+        {
+            vt = other.transform.parent.GetComponent<VelocityTracker>();
+
+            if (vt == null)
+                return;
+        }
+
+        if (vt.velocityMagnitude > .15f)
         {
             StartCoroutine(Die());
         }
@@ -105,6 +130,7 @@ public class Spider : MonoBehaviour
         dead = true;
 
         spiderAnimator.SetBool("Dead", true);
+        SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Ouch, transform.position, false);
 
         yield return null;
         spiderMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();

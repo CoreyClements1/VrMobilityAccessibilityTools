@@ -18,6 +18,7 @@ public class CompletionCanvas : MonoBehaviour
     [SerializeField] private TMP_Text percentDisplay;
     [SerializeField] private Slider completionSlider;
     [SerializeField] private Material skyboxMat;
+    [SerializeField] private AudioSource halloweenMusic, natureSounds;
 
     private int totalObjs, objsLeft;
     private float startAtmosphereVal, endAtmosphereVal;
@@ -35,10 +36,11 @@ public class CompletionCanvas : MonoBehaviour
             Destroy(gameObject);
         Instance = this;
 
-        Grass[] grasses = FindObjectsOfType<Grass>();
+        CleanableObject[] cleanableObjects = FindObjectsOfType<CleanableObject>();
         Spider[] spiders = FindObjectsOfType<Spider>();
+        EvilTree[] evilTrees = FindObjectsOfType<EvilTree>();
 
-        totalObjs = spiders.Length + grasses.Length;
+        totalObjs = spiders.Length + cleanableObjects.Length;
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;
@@ -70,10 +72,14 @@ public class CompletionCanvas : MonoBehaviour
         int percentInt = Mathf.RoundToInt(percent * 100f);
         percentDisplay.text = "<b>" + percentInt + "%</b> UN-SPOOKIFIED";
         float lerpedVal = Mathf.Lerp(startAtmosphereVal, endAtmosphereVal, percent);
+
         LeanTween.value(gameObject, skyboxMat.GetFloat("_AtmosphereThickness"), lerpedVal, .5f).setOnUpdate((value) =>
         {
             skyboxMat.SetFloat("_AtmosphereThickness", value);
         });
+
+        halloweenMusic.volume = 0.1f * (1f - Mathf.Pow(percent, 3f));
+        natureSounds.volume = 2f * percent;
     }
 
 

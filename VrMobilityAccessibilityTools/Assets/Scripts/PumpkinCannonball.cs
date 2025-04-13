@@ -66,6 +66,8 @@ public class PumpkinCannonball : MonoBehaviour
         col.enabled = false;
 
         Destroy(gameObject, 3f);
+
+        SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Boom, transform.position, true);
     }
 
 

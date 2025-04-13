@@ -8,6 +8,9 @@ TagManager:
   - Whacker
   - Cannon
   - Scooper
+  - Breaker
+  - Chopper
+  - Projectile
   layers:
   - Default
   - TransparentFX
