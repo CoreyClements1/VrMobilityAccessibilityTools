@@ -69,7 +69,7 @@ public class HatAttach : MonoBehaviour
     public void TryAttachHat(Hat hat)
     {
         if (attachedHat != null)
-            return;
+            UnattachHat();
 
         attachedHat = hat;
 

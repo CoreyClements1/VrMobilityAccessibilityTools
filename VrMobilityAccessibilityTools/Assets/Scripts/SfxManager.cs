@@ -17,7 +17,7 @@ public class SfxManager : MonoBehaviour
         public List<AudioClip> audioClips = new List<AudioClip>();
     }
 
-    public enum SoundEffect { Sweep, WoodChop, Shovel, PumpkinChop, Ouch, Fire, Boom }
+    public enum SoundEffect { Sweep, WoodChop, Shovel, PumpkinChop, Ouch, Fire, Boom, Pickaxe }
 
     public static SfxManager Instance;
 

@@ -11,10 +11,11 @@ public class CleanableObject : MonoBehaviour
     #region VARIABLES
 
 
-    private enum CleanableType { Shovel, Broom, Axe }
+    private enum CleanableType { Shovel, Broom, Axe, Pickaxe }
     [SerializeField] private CleanableType cleanableType;
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private Transform grassMesh;
+    [SerializeField] private Transform replacementMesh;
     private bool dead = false;
 
 
@@ -42,6 +43,10 @@ public class CleanableObject : MonoBehaviour
                     if (other.CompareTag("Chopper"))
                         TestVelocityAndDie(other);
                     break;
+                case CleanableType.Pickaxe:
+                    if (other.CompareTag("Breaker"))
+                        TestVelocityAndDie(other, true);
+                    break;
             }
         }
 
@@ -54,7 +59,7 @@ public class CleanableObject : MonoBehaviour
     #region DEATH
 
 
-    private void TestVelocityAndDie(Collider other)
+    private void TestVelocityAndDie(Collider other, bool replaceOnDie = false)
     {
         VelocityTracker vt = other.GetComponent<VelocityTracker>();
         if (vt == null)
@@ -67,12 +72,12 @@ public class CleanableObject : MonoBehaviour
 
         if (vt.velocityMagnitude > .08f)
         {
-            Die();
+            Die(replaceOnDie);
         }
     }
 
 
-    private void Die()
+    private void Die(bool replaceOnDie)
     {
         dead = true;
 
@@ -80,7 +85,15 @@ public class CleanableObject : MonoBehaviour
 
         deathParticles.Play();
 
-        Destroy(gameObject, 3f);
+        if (replaceOnDie)
+        {
+            replacementMesh.LeanScale(Vector3.one, .5f).setEaseOutExpo();
+        }
+        else
+        {
+            Destroy(gameObject, 3f);
+        }
+        
         CompletionCanvas.Instance.OnObjDestroyed();
 
         switch (cleanableType)
@@ -93,6 +106,9 @@ public class CleanableObject : MonoBehaviour
                 break;
             case CleanableType.Axe:
                 SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.PumpkinChop, transform.position, true);
+                break;
+            case CleanableType.Pickaxe:
+                SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Pickaxe, transform.position, true);
                 break;
         }
     }

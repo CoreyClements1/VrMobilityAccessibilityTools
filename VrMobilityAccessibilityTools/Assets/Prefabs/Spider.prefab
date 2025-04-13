@@ -96,10 +96,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27383b8a8faf6a64e802a682a177fb1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   deathParticles: {fileID: 4666661069243306223}
-  spiderMesh: {fileID: 7260852048262515820}
-  spiderAnimator: {fileID: 7260852048269943784}
+  enemyMesh: {fileID: 7260852048262515820}
+  enemyAnimator: {fileID: 7260852048269943784}
   idleMove: 1
+  moveDurationMultiplier: 1
+  moveDist: 0.2
 --- !u!1001 &3001294775724884540
 PrefabInstance:
   m_ObjectHideFlags: 0

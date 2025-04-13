@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spider : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
 
-    // Spider controls the animations and squishing of a spider
+    // Enemy controls the animations and squishing of an enemy (bat or spider)
 
 
     #region VARIABLES
 
 
+    public enum EnemyType { Spider, Bat }
+    [SerializeField] private EnemyType enemyType;
     [SerializeField] private ParticleSystem deathParticles;
-    [SerializeField] private Transform spiderMesh;
-    [SerializeField] private Animator spiderAnimator;
+    [SerializeField] private Transform enemyMesh;
+    [SerializeField] private Animator enemyAnimator;
     [SerializeField] private bool idleMove = true;
+    [SerializeField] private float moveDurationMultiplier = 1f;
+    [SerializeField] private float moveDist = .2f;
     private bool dead = false;
 
     private Vector3 startPos;
@@ -45,11 +49,11 @@ public class Spider : MonoBehaviour
     {
         while (!dead)
         {
-            Vector3 randPos = startPos + Vector3.right * Random.Range(-.2f, .2f) + Vector3.forward * Random.Range(-.2f, .2f);
-            float moveTime = Mathf.Abs((randPos - transform.position).magnitude) / .5f;
+            Vector3 randPos = startPos + Vector3.right * Random.Range(-moveDist, moveDist) + Vector3.forward * Random.Range(-moveDist, moveDist);
+            float moveTime = (Mathf.Abs((randPos - transform.position).magnitude) / .5f) * moveDurationMultiplier;
             transform.LeanMove(randPos, moveTime).setEaseOutQuad();
 
-            spiderAnimator.SetBool("Walking", true);
+            enemyAnimator.SetBool("Moving", true);
 
             Vector3 lookDir = (randPos - transform.position).normalized;
             Quaternion startRot = transform.rotation;
@@ -70,7 +74,7 @@ public class Spider : MonoBehaviour
                 yield return null;
             }
 
-            spiderAnimator.SetBool("Walking", false);
+            enemyAnimator.SetBool("Moving", false);
 
             if (!dead)
                 yield return new WaitForSeconds(Random.Range(.5f, 2f));
@@ -106,13 +110,16 @@ public class Spider : MonoBehaviour
         VelocityTracker vt = other.GetComponent<VelocityTracker>();
         if (vt == null)
         {
+            if (other.transform.parent == null)
+                return;
+
             vt = other.transform.parent.GetComponent<VelocityTracker>();
 
             if (vt == null)
                 return;
         }
 
-        if (vt.velocityMagnitude > .15f)
+        if (vt.velocityMagnitude > .08f)
         {
             StartCoroutine(Die());
         }
@@ -129,12 +136,15 @@ public class Spider : MonoBehaviour
     {
         dead = true;
 
-        spiderAnimator.SetBool("Dead", true);
+        enemyAnimator.SetBool("Dead", true);
         SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Ouch, transform.position, false);
 
-        yield return null;
-        spiderMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
+        if (enemyType == EnemyType.Bat)
+            yield return new WaitForSeconds(1f);
+        else
+            yield return null;
 
+        enemyMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
         deathParticles.Play();
 
         Destroy(gameObject, 3f);

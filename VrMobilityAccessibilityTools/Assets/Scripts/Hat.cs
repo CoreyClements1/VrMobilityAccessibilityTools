@@ -22,14 +22,6 @@ public class Hat : MonoBehaviour
     #region HAT ATTACH
 
 
-    // When grab starts, see if hat is attached; if it is, grab it and unatttach.
-    public void OnStartGrab()
-    {
-        
-
-    } // END OnStartGrab
-
-
     // When grab ends, see if we are overlapping hat attach; if yes, attach hat.
     public void OnEndGrab()
     {

@@ -37,10 +37,10 @@ public class CompletionCanvas : MonoBehaviour
         Instance = this;
 
         CleanableObject[] cleanableObjects = FindObjectsOfType<CleanableObject>();
-        Spider[] spiders = FindObjectsOfType<Spider>();
+        Enemy[] spiders = FindObjectsOfType<Enemy>();
         EvilTree[] evilTrees = FindObjectsOfType<EvilTree>();
 
-        totalObjs = spiders.Length + cleanableObjects.Length;
+        totalObjs = spiders.Length + cleanableObjects.Length + evilTrees.Length;
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;

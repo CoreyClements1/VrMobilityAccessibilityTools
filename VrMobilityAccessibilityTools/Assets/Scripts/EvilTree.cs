@@ -71,20 +71,30 @@ public class EvilTree : MonoBehaviour
             SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.WoodChop, transform.position, false);
 
         if (numHits >= maxHits)
-            Die();
+            StartCoroutine(Die());
+        else
+        {
+            Renderer treeRend = evilMesh.GetComponent<Renderer>();
+            LeanTween.cancel(treeRend.gameObject);
+            LeanTween.value(treeRend.gameObject, Color.black, Color.red, .1f).setLoopPingPong(1).setOnUpdate((Color value) =>
+            {
+                treeRend.material.SetColor("_EmissionColor", value);
+            });
+        }
     }
 
 
-    private void Die()
+    private IEnumerator Die()
     {
         dead = true;
-
-        evilMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
+        GetComponent<Collider>().enabled = false;
 
         deathParticles.Play();
-
-        Destroy(gameObject, 3f);
         CompletionCanvas.Instance.OnObjDestroyed();
+
+        evilMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
+        yield return new WaitForSeconds(.1f);
+        goodMesh.LeanScale(Vector3.one, .5f).setEaseOutExpo();
     }
 
 
