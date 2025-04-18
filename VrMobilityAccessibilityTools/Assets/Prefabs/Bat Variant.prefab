@@ -45,8 +45,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8798361401925306285}
     - target: {fileID: 5059212229897611531, guid: 1df8130d5dc5e0943a628f94dde4fd86, type: 3}
+      propertyPath: idleDurationMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5059212229897611531, guid: 1df8130d5dc5e0943a628f94dde4fd86, type: 3}
       propertyPath: moveDurationMultiplier
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7162091635319590865, guid: 1df8130d5dc5e0943a628f94dde4fd86, type: 3}
       propertyPath: m_LocalPosition.x

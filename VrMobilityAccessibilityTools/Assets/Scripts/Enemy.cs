@@ -16,8 +16,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private Transform enemyMesh;
     [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private bool lookAtPlayer = false;
     [SerializeField] private bool idleMove = true;
+    [SerializeField] private bool moveVertically = false;
     [SerializeField] private float moveDurationMultiplier = 1f;
+    [SerializeField] private float idleDurationMultiplier = 1f;
     [SerializeField] private float moveDist = .2f;
     private bool dead = false;
 
@@ -38,6 +41,14 @@ public class Enemy : MonoBehaviour
             StartCoroutine(IdleMoveCo());
     }
 
+    private void Update()
+    {
+        if (lookAtPlayer)
+        {
+            transform.LookAt(Camera.main.transform);
+        }
+    }
+
 
     #endregion
 
@@ -50,6 +61,9 @@ public class Enemy : MonoBehaviour
         while (!dead)
         {
             Vector3 randPos = startPos + Vector3.right * Random.Range(-moveDist, moveDist) + Vector3.forward * Random.Range(-moveDist, moveDist);
+            if (moveVertically)
+                randPos += Vector3.up * Random.Range(-moveDist, moveDist);
+
             float moveTime = (Mathf.Abs((randPos - transform.position).magnitude) / .5f) * moveDurationMultiplier;
             transform.LeanMove(randPos, moveTime).setEaseOutQuad();
 
@@ -62,7 +76,8 @@ public class Enemy : MonoBehaviour
             float elapsedTime = 0f;
             while (elapsedTime < moveTime)
             {
-                transform.rotation = Quaternion.Slerp(startRot, endRot, elapsedTime / (moveTime / 4f));
+                if (!lookAtPlayer)
+                    transform.rotation = Quaternion.Slerp(startRot, endRot, elapsedTime / (moveTime / 4f));
 
                 if (dead)
                 {
@@ -77,7 +92,7 @@ public class Enemy : MonoBehaviour
             enemyAnimator.SetBool("Moving", false);
 
             if (!dead)
-                yield return new WaitForSeconds(Random.Range(.5f, 2f));
+                yield return new WaitForSeconds(Random.Range(.5f * idleDurationMultiplier, 2f * idleDurationMultiplier));
         }
         
     }
@@ -140,7 +155,7 @@ public class Enemy : MonoBehaviour
         SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Ouch, transform.position, false);
 
         if (enemyType == EnemyType.Bat)
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.5f);
         else
             yield return null;
 
