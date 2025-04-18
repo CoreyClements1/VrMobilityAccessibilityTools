@@ -100,8 +100,13 @@ MonoBehaviour:
   deathParticles: {fileID: 4666661069243306223}
   enemyMesh: {fileID: 7260852048262515820}
   enemyAnimator: {fileID: 7260852048269943784}
+  col: {fileID: 736509983368488636}
+  rend: {fileID: 7260852048265862440}
+  lookAtPlayer: 0
   idleMove: 1
+  moveVertically: 0
   moveDurationMultiplier: 1
+  idleDurationMultiplier: 1
   moveDist: 0.2
 --- !u!1001 &3001294775724884540
 PrefabInstance:
@@ -250,6 +255,11 @@ PrefabInstance:
 --- !u!4 &7260852048262515820 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400100, guid: f5a9bd478ca094495a4520e37f57420d, type: 3}
+  m_PrefabInstance: {fileID: 7260852048262649480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7260852048265862440 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700000, guid: f5a9bd478ca094495a4520e37f57420d, type: 3}
   m_PrefabInstance: {fileID: 7260852048262649480}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &7260852048269943784 stripped

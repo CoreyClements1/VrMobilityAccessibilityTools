@@ -20,6 +20,9 @@ public class CompletionCanvas : MonoBehaviour
     [SerializeField] private Material skyboxMat;
     [SerializeField] private AudioSource halloweenMusic, natureSounds;
 
+    [ColorUsage(showAlpha: false, hdr: true)]
+    [SerializeField] private Color startEnvironmentColor, endEnvironmentColor;
+
     private int totalObjs, objsLeft;
     private float startAtmosphereVal, endAtmosphereVal;
 
@@ -37,10 +40,10 @@ public class CompletionCanvas : MonoBehaviour
         Instance = this;
 
         CleanableObject[] cleanableObjects = FindObjectsOfType<CleanableObject>();
-        Enemy[] spiders = FindObjectsOfType<Enemy>();
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
         EvilTree[] evilTrees = FindObjectsOfType<EvilTree>();
 
-        totalObjs = spiders.Length + cleanableObjects.Length + evilTrees.Length;
+        totalObjs = enemies.Length + cleanableObjects.Length + evilTrees.Length;
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;
@@ -71,11 +74,18 @@ public class CompletionCanvas : MonoBehaviour
         completionSlider.value = percent;
         int percentInt = Mathf.RoundToInt(percent * 100f);
         percentDisplay.text = "<b>" + percentInt + "%</b> UN-SPOOKIFIED";
-        float lerpedVal = Mathf.Lerp(startAtmosphereVal, endAtmosphereVal, percent);
 
-        LeanTween.value(gameObject, skyboxMat.GetFloat("_AtmosphereThickness"), lerpedVal, .5f).setOnUpdate((value) =>
+        // Lerp the lighting to the correct value based on percentage
+        float lerpedAtmosphereVal = Mathf.Lerp(startAtmosphereVal, endAtmosphereVal, percent);
+        Color lerpedEnvironmentColor = Color.Lerp(startEnvironmentColor, endEnvironmentColor, percent);
+
+        LeanTween.value(gameObject, skyboxMat.GetFloat("_AtmosphereThickness"), lerpedAtmosphereVal, .5f).setOnUpdate((value) =>
         {
             skyboxMat.SetFloat("_AtmosphereThickness", value);
+        });
+        LeanTween.value(gameObject, RenderSettings.ambientLight, lerpedEnvironmentColor, .5f).setOnUpdate((value) =>
+        {
+            RenderSettings.ambientLight = value;
         });
 
         halloweenMusic.volume = 0.1f * (1f - Mathf.Pow(percent, 3f));
@@ -87,6 +97,7 @@ public class CompletionCanvas : MonoBehaviour
     {
         LeanTween.cancel(gameObject);
         skyboxMat.SetFloat("_AtmosphereThickness", startAtmosphereVal);
+        RenderSettings.ambientLight = startEnvironmentColor;
     }
 
 

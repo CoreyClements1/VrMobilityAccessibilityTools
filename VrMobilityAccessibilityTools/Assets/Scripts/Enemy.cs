@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private Transform enemyMesh;
     [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private Collider col;
+    [SerializeField] private Renderer rend;
     [SerializeField] private bool lookAtPlayer = false;
     [SerializeField] private bool idleMove = true;
     [SerializeField] private bool moveVertically = false;
@@ -151,8 +153,14 @@ public class Enemy : MonoBehaviour
     {
         dead = true;
 
+        col.enabled = false;
         enemyAnimator.SetBool("Dead", true);
         SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Ouch, transform.position, false);
+
+        LeanTween.value(rend.gameObject, Color.black, Color.red, .1f).setLoopPingPong(1).setOnUpdate((Color value) =>
+        {
+            rend.material.SetColor("_EmissionColor", value);
+        });
 
         if (enemyType == EnemyType.Bat)
             yield return new WaitForSeconds(.5f);
