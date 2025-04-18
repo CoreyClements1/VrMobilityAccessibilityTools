@@ -1,0 +1,54 @@
+{
+    "name": "SceneNavigation",
+    "maps": [
+        {
+            "name": "SceneNav",
+            "id": "b641d98e-1b7b-4fa0-8e95-ceee0aa64c4c",
+            "actions": [
+                {
+                    "name": "MenuPrimary",
+                    "type": "Button",
+                    "id": "e642e76b-9ac6-4b86-9ea6-0062a44ac2ff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MenuSecondary",
+                    "type": "Button",
+                    "id": "86d59f4d-73f9-47ab-94ae-a0d7010752d3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5afa598b-29cd-4e3d-a73b-355f749feb69",
+                    "path": "<XRController>{LeftHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuPrimary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ab4f4c5-e579-4bf5-88b5-a43978f3c557",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

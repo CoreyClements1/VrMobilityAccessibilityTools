@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CleanableObject : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class CleanableObject : MonoBehaviour
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private Transform grassMesh;
     [SerializeField] private Transform replacementMesh;
+    [SerializeField] private UnityEvent onClean;
     private bool dead = false;
 
 
@@ -94,7 +96,8 @@ public class CleanableObject : MonoBehaviour
             Destroy(gameObject, 3f);
         }
         
-        CompletionCanvas.Instance.OnObjDestroyed();
+        if (CompletionCanvas.Instance != null)
+            CompletionCanvas.Instance.OnObjDestroyed();
 
         switch (cleanableType)
         {
@@ -111,6 +114,8 @@ public class CleanableObject : MonoBehaviour
                 SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Pickaxe, transform.position, true);
                 break;
         }
+
+        onClean?.Invoke();
     }
 
 
