@@ -17,7 +17,7 @@ public class SfxManager : MonoBehaviour
         public List<AudioClip> audioClips = new List<AudioClip>();
     }
 
-    public enum SoundEffect { Sweep, WoodChop, Shovel, PumpkinChop, Ouch, Fire, Boom, Pickaxe }
+    public enum SoundEffect { Sweep, WoodChop, Shovel, PumpkinChop, Ouch, Fire, Boom, Pickaxe, EvilLaugh }
 
     public static SfxManager Instance;
 
@@ -35,8 +35,12 @@ public class SfxManager : MonoBehaviour
     private void Awake()
     {
         if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
-
+            return;
+        }
+            
+        
         Instance = this;
 
         soundEffectsDictionary = new Dictionary<SoundEffect, List<AudioClip>>();

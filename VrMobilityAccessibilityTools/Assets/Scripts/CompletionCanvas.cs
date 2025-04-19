@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CompletionCanvas : MonoBehaviour
@@ -26,6 +27,8 @@ public class CompletionCanvas : MonoBehaviour
     private int totalObjs, objsLeft;
     private float startAtmosphereVal, endAtmosphereVal;
 
+    private bool updatingAtmosphere = true;
+
 
     #endregion
 
@@ -35,15 +38,19 @@ public class CompletionCanvas : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
 
         CleanableObject[] cleanableObjects = FindObjectsOfType<CleanableObject>();
         Enemy[] enemies = FindObjectsOfType<Enemy>();
         EvilTree[] evilTrees = FindObjectsOfType<EvilTree>();
 
-        totalObjs = enemies.Length + cleanableObjects.Length + evilTrees.Length;
+        totalObjs = cleanableObjects.Length + enemies.Length + evilTrees.Length;
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;
@@ -79,25 +86,81 @@ public class CompletionCanvas : MonoBehaviour
         float lerpedAtmosphereVal = Mathf.Lerp(startAtmosphereVal, endAtmosphereVal, percent);
         Color lerpedEnvironmentColor = Color.Lerp(startEnvironmentColor, endEnvironmentColor, percent);
 
-        LeanTween.value(gameObject, skyboxMat.GetFloat("_AtmosphereThickness"), lerpedAtmosphereVal, .5f).setOnUpdate((value) =>
+        if (updatingAtmosphere)
         {
-            skyboxMat.SetFloat("_AtmosphereThickness", value);
-        });
-        LeanTween.value(gameObject, RenderSettings.ambientLight, lerpedEnvironmentColor, .5f).setOnUpdate((value) =>
-        {
-            RenderSettings.ambientLight = value;
-        });
+            LeanTween.value(gameObject, skyboxMat.GetFloat("_AtmosphereThickness"), lerpedAtmosphereVal, .5f).setOnUpdate((value) =>
+            {
+                skyboxMat.SetFloat("_AtmosphereThickness", value);
+            });
+            LeanTween.value(gameObject, RenderSettings.ambientLight, lerpedEnvironmentColor, .5f).setOnUpdate((value) =>
+            {
+                RenderSettings.ambientLight = value;
+            });
 
-        halloweenMusic.volume = 0.1f * (1f - Mathf.Pow(percent, 3f));
-        natureSounds.volume = 2f * percent;
+            halloweenMusic.volume = 0.1f * (1f - Mathf.Pow(percent, 3f));
+            natureSounds.volume = 2f * percent;
+
+            if (percent >= 1f)
+            {
+                StartCoroutine(WinCo());
+            }
+        }
     }
+
+
+    #endregion
+
+
+    #region RESET ATMOSPHERE AND WIN
 
 
     private void OnApplicationQuit()
     {
+        ResetAtmostphere();
+    }
+
+    public void OnStop()
+    {
+        StartCoroutine(StopCo());
+    }
+
+    private IEnumerator StopCo()
+    {
+        updatingAtmosphere = false;
+
+        LeanTween.value(halloweenMusic.gameObject, halloweenMusic.volume, 0f, .5f).setOnUpdate((float value) =>
+        {
+            halloweenMusic.volume = value;
+        });
+        LeanTween.value(natureSounds.gameObject, natureSounds.volume, 0f, .5f).setOnUpdate((float value) =>
+        {
+            natureSounds.volume = value;
+        });
+
+        yield return new WaitForSeconds(.5f);
+
+        ResetAtmostphere();
+    }
+
+    private void ResetAtmostphere()
+    {
+        updatingAtmosphere = false;
+
         LeanTween.cancel(gameObject);
         skyboxMat.SetFloat("_AtmosphereThickness", startAtmosphereVal);
         RenderSettings.ambientLight = startEnvironmentColor;
+    }
+
+    private IEnumerator WinCo()
+    {
+        updatingAtmosphere = false;
+
+        WinCanvas.Instance.FadeOut();
+        SceneLoader.Instance.ManualSetIsLoading(true);
+
+        yield return new WaitForSeconds(5f);
+
+        SceneLoader.Instance.LoadScene("Menu", true);
     }
 
 

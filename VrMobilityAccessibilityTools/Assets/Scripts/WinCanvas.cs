@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FadeOutCanvas : MonoBehaviour
+public class WinCanvas : MonoBehaviour
 {
 
-    public static FadeOutCanvas Instance;
+    public static WinCanvas Instance;
 
     [SerializeField] private CanvasGroup canvGroup;
 
@@ -32,5 +32,11 @@ public class FadeOutCanvas : MonoBehaviour
     {
         LeanTween.cancel(canvGroup.gameObject);
         canvGroup.LeanAlpha(0f, .5f);
+    }
+
+    public void HideImmediate()
+    {
+        LeanTween.cancel(canvGroup.gameObject);
+        canvGroup.alpha = 0f;
     }
 }

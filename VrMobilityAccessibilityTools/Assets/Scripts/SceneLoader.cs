@@ -16,10 +16,12 @@ public class SceneLoader : MonoBehaviour
     private void Awake()
     {
         if (Instance != null && Instance != this)
+        {
             Destroy(gameObject);
+            return;
+        }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -36,6 +38,11 @@ public class SceneLoader : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    public void ManualSetIsLoading(bool loading)
+    {
+        isLoading = loading;
+    }
+
     private void Update()
     {
         if (isLoading) return;
@@ -45,39 +52,68 @@ public class SceneLoader : MonoBehaviour
 
         if (primaryHeld && secondaryHeld)
         {
-            LoadScene("Menu", 0f);
+            LoadScene("Menu");
         }
     }
 
-    public void LoadSceneWithDelay(string sceneToLoad)
+    public void LoadScene(string sceneToLoad)
     {
-        LoadScene(sceneToLoad, 2f);
+        LoadScene(sceneToLoad, false);
     }
 
-    public void LoadScene(string sceneToLoad, float delay)
+    public void LoadScene(string sceneToLoad, bool overrideIsLoading)
     {
-        if (isLoading) return;
+        if (isLoading && !overrideIsLoading) return;
 
         isLoading = true;
 
-        StartCoroutine(DelayThenLoad(sceneToLoad, delay));
+        if (sceneToLoad != "Menu")
+        {
+            SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.EvilLaugh, transform.position, false);
+            StartCoroutine(WaitThenLoadScene(sceneToLoad, 2.5f));
+        }
+        else
+        {
+            StartCoroutine(LoadSceneCo(sceneToLoad));
+        }
     }
 
-    private IEnumerator DelayThenLoad(string sceneToLoad, float delay)
+    private IEnumerator WaitThenLoadScene(string sceneToLoad, float delay)
     {
         yield return new WaitForSeconds(delay);
+        StartCoroutine(LoadSceneCo(sceneToLoad));
+    }
 
+    private IEnumerator LoadSceneCo(string sceneToLoad)
+    {
         FadeOutCanvas.Instance.FadeOut();
+        CompletionCanvas completionCanvas = FindObjectOfType<CompletionCanvas>();
+        if (completionCanvas != null)
+        {
+            completionCanvas.OnStop();
+        }
+
         yield return new WaitForSeconds(.5f);
 
-        Debug.Log("Loading scene " + sceneToLoad);
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         isLoading = false;
         FadeOutCanvas.Instance.FadeIn();
+        WinCanvas.Instance.HideImmediate();
+
+        if (scene.name == "Menu")
+        {
+            GraveyardXr.Instance.transform.position = new Vector3(0.062f, 0.72f, 6.077f);
+        }
+        else
+        {
+            GraveyardXr.Instance.transform.position = new Vector3(0.587f, 0.344f, 5.532f);
+        }
+
+        SceneManager.MoveGameObjectToScene(GraveyardXr.Instance.gameObject, scene);
     }
 
 }

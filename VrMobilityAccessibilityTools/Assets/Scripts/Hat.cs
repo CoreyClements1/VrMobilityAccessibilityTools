@@ -11,7 +11,6 @@ public class Hat : MonoBehaviour
     #region VARIABLES
 
 
-    [SerializeField] private HatAttach hatAttach;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Collider col;
 
@@ -25,6 +24,7 @@ public class Hat : MonoBehaviour
     // When grab ends, see if we are overlapping hat attach; if yes, attach hat.
     public void OnEndGrab()
     {
+        HatAttach hatAttach = FindObjectOfType<HatAttach>();
         if (hatAttach.IsHatOverlapped(this))
         {
             hatAttach.TryAttachHat(this);
