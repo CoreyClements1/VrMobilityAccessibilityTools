@@ -121,8 +121,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f112375010b29b9418f1414954efd7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cleanableType: 0
   deathParticles: {fileID: 7347521666875491265}
   grassMesh: {fileID: 458559903634527328}
+  replacementMesh: {fileID: 0}
+  necessaryVelocity: 0.04
+  onClean:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4896752780285674998
 GameObject:
   m_ObjectHideFlags: 0

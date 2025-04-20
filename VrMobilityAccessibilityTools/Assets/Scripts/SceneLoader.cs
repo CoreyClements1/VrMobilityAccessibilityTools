@@ -93,7 +93,7 @@ public class SceneLoader : MonoBehaviour
             completionCanvas.OnStop();
         }
 
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.7f);
 
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }

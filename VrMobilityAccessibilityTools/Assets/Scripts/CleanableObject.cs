@@ -17,6 +17,7 @@ public class CleanableObject : MonoBehaviour
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private Transform grassMesh;
     [SerializeField] private Transform replacementMesh;
+    [SerializeField] private float necessaryVelocity = 0.08f;
     [SerializeField] private UnityEvent onClean;
     private bool dead = false;
 
@@ -72,7 +73,7 @@ public class CleanableObject : MonoBehaviour
                 return;
         }
 
-        if (vt.velocityMagnitude > .08f)
+        if (vt.velocityMagnitude > necessaryVelocity)
         {
             Die(replaceOnDie);
         }

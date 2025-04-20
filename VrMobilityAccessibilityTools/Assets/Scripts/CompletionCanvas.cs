@@ -23,6 +23,7 @@ public class CompletionCanvas : MonoBehaviour
 
     [ColorUsage(showAlpha: false, hdr: true)]
     [SerializeField] private Color startEnvironmentColor, endEnvironmentColor;
+    [SerializeField] private bool trackEnemies, trackCleanable, trackTrees;
 
     private int totalObjs, objsLeft;
     private float startAtmosphereVal, endAtmosphereVal;
@@ -50,7 +51,14 @@ public class CompletionCanvas : MonoBehaviour
         Enemy[] enemies = FindObjectsOfType<Enemy>();
         EvilTree[] evilTrees = FindObjectsOfType<EvilTree>();
 
-        totalObjs = cleanableObjects.Length + enemies.Length + evilTrees.Length;
+        totalObjs = 0;
+        if (trackCleanable)
+            totalObjs += cleanableObjects.Length;
+        if (trackEnemies)
+            totalObjs += enemies.Length;
+        if (trackTrees)
+            totalObjs += evilTrees.Length;
+
         objsLeft = totalObjs;
 
         startAtmosphereVal = 4.5f;
@@ -160,6 +168,7 @@ public class CompletionCanvas : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
+        WinCanvas.Instance.FadeJustText();
         SceneLoader.Instance.LoadScene("Menu", true);
     }
 
