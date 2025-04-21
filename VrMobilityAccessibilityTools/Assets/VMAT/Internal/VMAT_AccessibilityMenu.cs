@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class VMAT_AccessibilityMenu : MonoBehaviour
+public class VMAT_AccessibilityMenu : VMAT_Menu
 {
 
     // VMAT_AccessibilityMenu handles the display and control of the main accessibility VMAT menu
@@ -21,6 +21,7 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
     [SerializeField] private Slider reachExtensionAmtSlider;
     [SerializeField] private TMP_Text reachExtensionAmtText;
     [SerializeField] private Slider heightAdjustSlider;
+    [SerializeField] private CanvasGroup canvGroup;
 
 
     #endregion
@@ -36,13 +37,13 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
             handControllers.AddRange(root.GetComponentsInChildren<VMAT_HandController>(true));
 
         heightAdjuster = FindObjectOfType<VMAT_HeightAdjuster>(true);
+
+        HideMenu();
     }
 
 
     private void Start()
     {
-        gameObject.SetActive(true);
-
         // Ping all values
         OnReachExtensionEnabledChange();
         OnReachExtensionAmtChange();
@@ -100,6 +101,19 @@ public class VMAT_AccessibilityMenu : MonoBehaviour
     public void OnHeightAdjustChange()
     {
         heightAdjuster.SetHeightScale(heightAdjustSlider.value);
+    }
+
+
+    // Shows menu
+    public override void ShowMenu()
+    {
+        canvGroup.alpha = 1f;
+    }
+
+    // Hides menu
+    public override void HideMenu()
+    {
+        canvGroup.alpha = 0f;
     }
 
 

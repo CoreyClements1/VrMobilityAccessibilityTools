@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class VMAT_HandController : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class VMAT_HandController : MonoBehaviour
 
     private bool useReachExtension = false;
     private float reachExtensionScale = 2f;
+    private Vector3 restingControllerOffset;
+    private float restingYawOffset;
 
 
     #endregion
@@ -58,7 +62,9 @@ public class VMAT_HandController : MonoBehaviour
             children.Add(child);
 
         for (int i = children.Count - 1; i >= 0; i--)
-            children[i].SetParent(offsetTransform);
+            children[i].SetParent(offsetTransform, false);
+
+        ResetReachExtensionOrigin();
     }
 
 
@@ -68,11 +74,22 @@ public class VMAT_HandController : MonoBehaviour
         if (transform == null)
             return;
 
-        Vector3 offset = transform.localPosition - originPositionLocal;
-        offsetTransform.localPosition = originPositionLocal + reachExtensionScale * offset;
+        Vector3 offsetFromCamera = transform.position - Camera.main.transform.position;
+        Vector3 offsetFromResting = offsetFromCamera - RotateWithRig(restingControllerOffset);
+        offsetTransform.position = Camera.main.transform.position + 
+            RotateWithRig(restingControllerOffset) + 
+            reachExtensionScale * offsetFromResting;
 
         offsetTransform.localRotation = transform.localRotation;
-        offsetTransform.localScale = transform.localScale;
+    }
+
+    private Vector3 RotateWithRig(Vector3 vectorToRotate)
+    {
+        float currentYaw = Camera.main.transform.eulerAngles.y;
+        float relativeYaw = Mathf.DeltaAngle(restingYawOffset, currentYaw);
+
+        Quaternion rot = Quaternion.Euler(0f, relativeYaw, 0f);
+        return rot * vectorToRotate;
     }
 
 
@@ -88,7 +105,8 @@ public class VMAT_HandController : MonoBehaviour
     // Resets the reach extension "origin" to the current controller position
     public void ResetReachExtensionOrigin()
     {
-        originPositionLocal = transform.localPosition;
+        restingControllerOffset = transform.position - Camera.main.transform.position;
+        restingYawOffset = Camera.main.transform.eulerAngles.y;
     }
 
 

@@ -163,4 +163,21 @@ public class VMAT_Menu : MonoBehaviour
     #endregion
 
 
+    #region OTHER
+
+
+    public virtual void ShowMenu()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public virtual void HideMenu()
+    {
+        gameObject.SetActive(false);
+    }
+
+
+    #endregion
+
+
 }

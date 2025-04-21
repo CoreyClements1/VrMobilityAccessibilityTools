@@ -48,6 +48,74 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "VmatButtons",
+            "id": "5275d2e7-2fd5-48d4-b157-be8bcdc625ec",
+            "actions": [
+                {
+                    "name": "VmatOpenMenu",
+                    "type": "Button",
+                    "id": "33f8d715-d61d-40e9-a326-2e3fdfa49f27",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "VmatSelectItem",
+                    "type": "Button",
+                    "id": "7586aab1-a11a-48b0-b076-3cf19c325293",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "VmatJoystickNav",
+                    "type": "Value",
+                    "id": "2cae2dfa-aab4-41f5-8cdf-683388369069",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8df895e3-818e-4b89-a500-4d887c913524",
+                    "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VmatOpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d855034-4259-4e2a-9d6f-1082fe551401",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VmatSelectItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df83fe6f-f424-4a55-aa9d-fcb0021f3ac2",
+                    "path": "<XRController>{RightHand}/{Primary2DAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VmatJoystickNav",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

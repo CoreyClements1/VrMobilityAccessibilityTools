@@ -18,14 +18,13 @@ public class VMAT_InputManager : MonoBehaviour
 
     public static VMAT_InputManager Instance;
 
-    [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private VMAT_Menu accessibilityMenu;
     [SerializeField] private VMAT_Highlighter highlighterPrefab;
     private InputActionMap actionMap;
 
-    private InputAction primaryButtonAction;
-    private InputAction secondaryButtonAction;
-    private InputAction joystickAction;
+    [SerializeField] private InputActionReference openMenuAction;
+    [SerializeField] private InputActionReference selectMenuItemAction;
+    [SerializeField] private InputActionReference joystickNavigationAction;
 
     private List<MonoBehaviour> disabledWithMenu = new List<MonoBehaviour>();
     private List<bool> disabledWithMenuLastState = new List<bool>();
@@ -54,21 +53,13 @@ public class VMAT_InputManager : MonoBehaviour
             Destroy(gameObject);
         Instance = this;
 
-        // Set up actions
-        actionMap = inputActions.FindActionMap("VMAT");
-
-        primaryButtonAction = actionMap.FindAction("PrimaryButton");
-        secondaryButtonAction = actionMap.FindAction("SecondaryButton");
-        joystickAction = actionMap.FindAction("Joystick");
-
+        // Set up objects which must be deactivated when the menu is opened
         MonoBehaviour[] locoProviders = FindObjectsOfType<LocomotionProvider>();
         foreach (MonoBehaviour provider in locoProviders)
         {
             disabledWithMenu.Add(provider);
             disabledWithMenuLastState.Add(provider.enabled);
         }
-
-        accessibilityMenu.gameObject.SetActive(false);
     }
 
 
@@ -77,14 +68,23 @@ public class VMAT_InputManager : MonoBehaviour
     {
         actionMap?.Enable();
 
-        if (primaryButtonAction != null)
-            primaryButtonAction.performed += OnPrimaryButton;
+        if (openMenuAction != null)
+        {
+            openMenuAction.action.performed += OnSecondaryButton;
+            openMenuAction.action.Enable();
+        }
+        
+        if (selectMenuItemAction != null)
+        {
+            selectMenuItemAction.action.performed += OnPrimaryButton;
+            selectMenuItemAction.action.Enable();
+        }
 
-        if (secondaryButtonAction != null)
-            secondaryButtonAction.performed += OnSecondaryButton;
-
-        if (joystickAction != null)
-            joystickAction.performed += OnJoystick;
+        if (joystickNavigationAction != null)
+        {
+            joystickNavigationAction.action.performed += OnJoystick;
+            joystickNavigationAction.action.Enable();
+        }
     }
 
 
@@ -93,14 +93,23 @@ public class VMAT_InputManager : MonoBehaviour
     {
         actionMap?.Disable();
 
-        if (primaryButtonAction != null)
-            primaryButtonAction.performed -= OnPrimaryButton;
+        if (openMenuAction != null)
+        {
+            openMenuAction.action.performed -= OnSecondaryButton;
+            openMenuAction.action.Disable();
+        }
 
-        if (secondaryButtonAction != null)
-            secondaryButtonAction.performed -= OnSecondaryButton;
+        if (selectMenuItemAction != null)
+        {
+            selectMenuItemAction.action.performed -= OnPrimaryButton;
+            selectMenuItemAction.action.Disable();
+        }
 
-        if (joystickAction != null)
-            joystickAction.performed -= OnJoystick;
+        if (joystickNavigationAction != null)
+        {
+            joystickNavigationAction.action.performed -= OnJoystick;
+            joystickNavigationAction.action.Disable();
+        }
     }
 
 
@@ -130,7 +139,7 @@ public class VMAT_InputManager : MonoBehaviour
         {
             accessibilityMenuShown = false;
             accessibilityMenu.StopNavigatingMenu();
-            accessibilityMenu.gameObject.SetActive(false);
+            accessibilityMenu.HideMenu();
             currentlyNavigatedMenu = pendingNavigatedMenu;
 
             if (currentlyNavigatedMenu == null)
@@ -147,7 +156,7 @@ public class VMAT_InputManager : MonoBehaviour
         else
         {
             accessibilityMenuShown = true;
-            accessibilityMenu.gameObject.SetActive(true);
+            accessibilityMenu.ShowMenu();
             accessibilityMenu.StartNavigatingMenu();
             pendingNavigatedMenu = currentlyNavigatedMenu;
             currentlyNavigatedMenu = accessibilityMenu;
