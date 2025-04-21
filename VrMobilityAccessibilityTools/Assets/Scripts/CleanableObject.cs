@@ -64,6 +64,12 @@ public class CleanableObject : MonoBehaviour
 
     private void TestVelocityAndDie(Collider other, bool replaceOnDie = false)
     {
+        if (VMAT_AccessibilityMenu.Instance != null && VMAT_AccessibilityMenu.Instance.normalizationEnabled)
+        {
+            Die(replaceOnDie);
+            return;
+        }
+
         VelocityTracker vt = other.GetComponent<VelocityTracker>();
         if (vt == null)
         {

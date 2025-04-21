@@ -50,7 +50,11 @@ public class VMAT_InputManager : MonoBehaviour
     {
         // Setup singleton
         if (Instance != null)
+        {
             Destroy(gameObject);
+            return;
+        }
+            
         Instance = this;
 
         // Set up objects which must be deactivated when the menu is opened
@@ -91,8 +95,6 @@ public class VMAT_InputManager : MonoBehaviour
     // OnDisable, unsubscribe from input actions
     private void OnDisable()
     {
-        actionMap?.Disable();
-
         if (openMenuAction != null)
         {
             openMenuAction.action.performed -= OnSecondaryButton;

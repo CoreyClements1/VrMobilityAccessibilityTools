@@ -47,6 +47,12 @@ public class EvilTree : MonoBehaviour
 
     private void TestVelocityAndDamage(Collider other)
     {
+        if (VMAT_AccessibilityMenu.Instance != null && VMAT_AccessibilityMenu.Instance.normalizationEnabled)
+        {
+            Damage(true);
+            return;
+        }
+
         VelocityTracker vt = other.GetComponent<VelocityTracker>();
         if (vt == null)
         {

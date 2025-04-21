@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -22,6 +23,11 @@ public class VMAT_HandController : MonoBehaviour
     private Vector3 restingControllerOffset;
     private float restingYawOffset;
 
+    private bool useNormalization = false;
+    private float normalizationScale = 0.2f;
+    private Queue<KeyValuePair<Vector3, float>> lastPositions = new Queue<KeyValuePair<Vector3, float>>();
+    private Queue<KeyValuePair<Quaternion, float>> lastRotations = new Queue<KeyValuePair<Quaternion, float>>();
+
 
     #endregion
 
@@ -41,6 +47,9 @@ public class VMAT_HandController : MonoBehaviour
             HandleReachExtension();
         else
             HandleTrackController();
+
+        if (useNormalization)
+            HandleNormalization();
     }
 
 
@@ -123,6 +132,69 @@ public class VMAT_HandController : MonoBehaviour
     public void SetReachExtensionScale(float scale)
     {
         reachExtensionScale = scale;
+    }
+
+
+    #endregion
+
+
+    #region NORMALIZATION
+
+
+    // Normalizes inputs (averages inputs from last second or so)
+    private void HandleNormalization()
+    {
+        // Positions
+        lastPositions.Enqueue(new KeyValuePair<Vector3, float>(offsetTransform.position, Time.time));
+        while (lastPositions.Count > 0 && Time.time - lastPositions.Peek().Value > normalizationScale)
+        {
+            lastPositions.Dequeue();
+        }
+
+        Vector3 posSum = Vector3.zero;
+        foreach (var v in lastPositions)
+        {
+            posSum += v.Key;
+        }
+        Vector3 posAverage = posSum / lastPositions.Count;
+
+        offsetTransform.position = posAverage;
+
+        // Rotations
+        lastRotations.Enqueue(new KeyValuePair<Quaternion, float>(offsetTransform.rotation, Time.time));
+        while (lastRotations.Count > 0 && Time.time - lastRotations.Peek().Value > normalizationScale)
+        {
+            lastRotations.Dequeue();
+        }
+
+        Vector4 rotSum = Vector4.zero;
+        foreach (var q in lastRotations)
+        {
+            Quaternion q2 = q.Key;
+            if (Quaternion.Dot(q.Key, lastRotations.Peek().Key) < 0f)
+                q2 = new Quaternion(-q.Key.x, -q.Key.y, -q.Key.z, -q.Key.w);
+
+            rotSum += new Vector4(q2.x, q2.y, q2.z, q2.w);
+        }
+
+        // Normalize the result back to unit‑length
+        float invMag = 1.0f / rotSum.magnitude;
+        Quaternion averageRot = new Quaternion(rotSum.x * invMag, rotSum.y * invMag, rotSum.z * invMag, rotSum.w * invMag);
+        offsetTransform.rotation = averageRot;
+    }
+
+
+    // Sets whether normalization is enabled or not
+    public void SetEnabledNormalization(bool enabled)
+    {
+        useNormalization = enabled;
+    }
+
+
+    // Sets the scale of normalization
+    public void SetNormalizationScale(float scale)
+    {
+        normalizationScale = scale;
     }
 
 
