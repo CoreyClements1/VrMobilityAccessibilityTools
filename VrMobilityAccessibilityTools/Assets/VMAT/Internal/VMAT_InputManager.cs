@@ -16,15 +16,14 @@ public class VMAT_InputManager : MonoBehaviour
     #region VARIABLES
 
 
-    public static VMAT_InputManager Instance;
-
     [SerializeField] private VMAT_Menu accessibilityMenu;
+    [SerializeField] private VMAT_SoundsManager soundsManager;
     [SerializeField] private VMAT_Highlighter highlighterPrefab;
     private InputActionMap actionMap;
 
-    [SerializeField] private InputActionReference openMenuAction;
-    [SerializeField] private InputActionReference selectMenuItemAction;
-    [SerializeField] private InputActionReference joystickNavigationAction;
+    private InputActionReference openMenuAction;
+    private InputActionReference selectMenuItemAction;
+    private InputActionReference joystickNavigationAction;
 
     private List<MonoBehaviour> disabledWithMenu = new List<MonoBehaviour>();
     private List<bool> disabledWithMenuLastState = new List<bool>();
@@ -48,15 +47,6 @@ public class VMAT_InputManager : MonoBehaviour
     // Awake, setup input actions
     private void Awake()
     {
-        // Setup singleton
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-            
-        Instance = this;
-
         // Set up objects which must be deactivated when the menu is opened
         MonoBehaviour[] locoProviders = FindObjectsOfType<LocomotionProvider>();
         foreach (MonoBehaviour provider in locoProviders)
@@ -72,18 +62,21 @@ public class VMAT_InputManager : MonoBehaviour
     {
         actionMap?.Enable();
 
+        openMenuAction = VMAT_Options.Instance.openMenuAction;
         if (openMenuAction != null)
         {
             openMenuAction.action.performed += OnSecondaryButton;
             openMenuAction.action.Enable();
         }
-        
+
+        selectMenuItemAction = VMAT_Options.Instance.selectMenuItemAction;
         if (selectMenuItemAction != null)
         {
             selectMenuItemAction.action.performed += OnPrimaryButton;
             selectMenuItemAction.action.Enable();
         }
 
+        joystickNavigationAction = VMAT_Options.Instance.joystickNavigationAction;
         if (joystickNavigationAction != null)
         {
             joystickNavigationAction.action.performed += OnJoystick;
@@ -128,6 +121,7 @@ public class VMAT_InputManager : MonoBehaviour
         if (currentlyNavigatedMenu != null)
         {
             currentlyNavigatedMenu.TrySelectHighlighted();
+            soundsManager.PlaySfx(VMAT_SoundsManager.SoundEffectType.Select);
         }
     }
 
@@ -143,6 +137,8 @@ public class VMAT_InputManager : MonoBehaviour
             accessibilityMenu.StopNavigatingMenu();
             accessibilityMenu.HideMenu();
             currentlyNavigatedMenu = pendingNavigatedMenu;
+
+            soundsManager.PlaySfx(VMAT_SoundsManager.SoundEffectType.Close);
 
             if (currentlyNavigatedMenu == null)
             {
@@ -162,6 +158,8 @@ public class VMAT_InputManager : MonoBehaviour
             accessibilityMenu.StartNavigatingMenu();
             pendingNavigatedMenu = currentlyNavigatedMenu;
             currentlyNavigatedMenu = accessibilityMenu;
+
+            soundsManager.PlaySfx(VMAT_SoundsManager.SoundEffectType.Open);
 
             for (int i = 0; i < disabledWithMenu.Count; i++) {
                 disabledWithMenuLastState[i] = disabledWithMenu[i].enabled;
@@ -213,6 +211,7 @@ public class VMAT_InputManager : MonoBehaviour
         if (currentlyNavigatedMenu != null)
         {
             currentlyNavigatedMenu.NavigateInDir(dir);
+            soundsManager.PlaySfx(VMAT_SoundsManager.SoundEffectType.Navigate);
         }
     }
 

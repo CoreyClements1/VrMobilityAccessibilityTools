@@ -125,6 +125,11 @@ MonoBehaviour:
   cleanableType: 2
   deathParticles: {fileID: 6497286180074537028}
   grassMesh: {fileID: 2556253209455249880}
+  replacementMesh: {fileID: 0}
+  necessaryVelocity: 0.08
+  onClean:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1022997889388475403
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +142,6 @@ GameObject:
   - component: {fileID: 323699398370813771}
   - component: {fileID: 3127647231108905128}
   - component: {fileID: 353415262077019814}
-  - component: {fileID: 7253048781563792117}
   m_Layer: 0
   m_Name: Pumpkin_E
   m_TagString: Untagged
@@ -233,21 +237,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3071882088742634333, guid: 92c804a339f52cb489d7251a0df43def, type: 3}
---- !u!114 &7253048781563792117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1022997889388475403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f112375010b29b9418f1414954efd7ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cleanableType: 2
-  deathParticles: {fileID: 0}
-  grassMesh: {fileID: 0}
 --- !u!1001 &5177524236333935221
 PrefabInstance:
   m_ObjectHideFlags: 0

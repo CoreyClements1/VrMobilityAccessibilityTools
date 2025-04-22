@@ -15,8 +15,6 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     #region VARIABLES
 
 
-    public static VMAT_AccessibilityMenu Instance;
-
     private List<VMAT_HandController> handControllers = new List<VMAT_HandController>();
     private VMAT_HeightAdjuster heightAdjuster;
 
@@ -29,9 +27,6 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     [SerializeField] private Slider heightAdjustSlider;
     [SerializeField] private CanvasGroup canvGroup;
 
-    public bool reachExtensionEnabled { get; private set; } = false;
-    public bool normalizationEnabled { get; private set; } = false;
-
 
     #endregion
 
@@ -41,14 +36,6 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
         // Get all hand controllers
         foreach (GameObject root in SceneManager.GetActiveScene().GetRootGameObjects())
             handControllers.AddRange(root.GetComponentsInChildren<VMAT_HandController>(true));
@@ -61,6 +48,18 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
 
     private void Start()
     {
+        // Load player prefs
+        if (PlayerPrefs.GetInt("VMAT_ReachExtensionEnabled", 0) == 1)
+            reachExtensionEnabledToggle.isOn = true;
+        if (PlayerPrefs.GetFloat("VMAT_ReachExtensionAmt", -1f) != -1f)
+            reachExtensionAmtSlider.value = PlayerPrefs.GetFloat("VMAT_ReachExtensionAmt");
+        if (PlayerPrefs.GetInt("VMAT_NormalizationEnabled", 0) == 1)
+            normalizationEnabledToggle.isOn = true;
+        if (PlayerPrefs.GetFloat("VMAT_NormalizationAmt", -1f) != -1f)
+            normalizationAmtSlider.value = PlayerPrefs.GetFloat("VMAT_NormalizationAmt");
+        if (PlayerPrefs.GetFloat("VMAT_HeightAdjustment", -1f) != -1f)
+            heightAdjustSlider.value = PlayerPrefs.GetFloat("VMAT_HeightAdjustment");
+
         // Ping all values
         OnReachExtensionEnabledChange();
         OnReachExtensionAmtChange();
@@ -68,6 +67,17 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
         OnHeightAdjustChange();
         OnNormalizationEnabledChange();
         OnNormalizationAmtChange();
+
+        StartCoroutine(WaitThenResetHandOrigins());
+    }
+
+    private IEnumerator WaitThenResetHandOrigins()
+    {
+        yield return null;
+        foreach (VMAT_HandController handController in handControllers)
+        {
+            handController.ResetReachExtensionOrigin();
+        }
     }
 
 
@@ -80,7 +90,8 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     // Enables / disables reach extension
     public void OnReachExtensionEnabledChange()
     {
-        reachExtensionEnabled = reachExtensionEnabledToggle.isOn;
+        VMAT_Options.Instance.reachExtensionEnabled = reachExtensionEnabledToggle.isOn;
+        PlayerPrefs.SetInt("VMAT_ReachExtensionEnabled", (reachExtensionEnabledToggle.isOn ? 1 : 0));
 
         foreach (VMAT_HandController handController in handControllers)
         {
@@ -94,6 +105,7 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     {
         float newScale = 1f + (reachExtensionAmtSlider.value * 3f);
         reachExtensionAmtText.text = "Reach Extension Scale: " + newScale.ToString("F2");
+        PlayerPrefs.SetFloat("VMAT_ReachExtensionAmt", reachExtensionAmtSlider.value);
 
         foreach (VMAT_HandController handController in handControllers)
         {
@@ -121,7 +133,8 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     // Enables / disables normalization
     public void OnNormalizationEnabledChange()
     {
-        normalizationEnabled = normalizationEnabledToggle.isOn;
+        VMAT_Options.Instance.normalizationEnabled = normalizationEnabledToggle.isOn;
+        PlayerPrefs.SetInt("VMAT_NormalizationEnabled", (normalizationEnabledToggle.isOn ? 1 : 0));
 
         foreach (VMAT_HandController handController in handControllers)
         {
@@ -136,7 +149,8 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
         float newScale = 0.2f + (normalizationAmtSlider.value * 2f);
         float t = (newScale - 0.2f) / (2.2f - 0.2f);
         float percentage = 10 + t * (100 - 10);
-        normalizationAmtText.text = "Normalization: " + percentage.ToString("F2") + "%";
+        normalizationAmtText.text = "Normalization: " + Mathf.FloorToInt(percentage).ToString() + "%";
+        PlayerPrefs.SetFloat("VMAT_NormalizationAmt", normalizationAmtSlider.value);
 
         foreach (VMAT_HandController handController in handControllers)
         {
@@ -154,6 +168,7 @@ public class VMAT_AccessibilityMenu : VMAT_Menu
     // Adjusts height
     public void OnHeightAdjustChange()
     {
+        PlayerPrefs.SetFloat("VMAT_HeightAdjustment", heightAdjustSlider.value);
         heightAdjuster.SetHeightScale(heightAdjustSlider.value);
     }
 

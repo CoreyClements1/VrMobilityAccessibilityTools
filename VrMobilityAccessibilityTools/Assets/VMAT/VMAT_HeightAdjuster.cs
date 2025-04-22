@@ -23,6 +23,21 @@ public class VMAT_HeightAdjuster : MonoBehaviour
     #region HEIGHT
 
 
+    private void OnEnable()
+    {
+        StartCoroutine(WaitThenReset());
+    }
+
+    private IEnumerator WaitThenReset()
+    {
+        yield return null;
+        yield return null;
+
+        if (PlayerPrefs.GetFloat("VMAT_HeightAdjustment", -1f) != -1f)
+            SetHeightScale(PlayerPrefs.GetFloat("VMAT_HeightAdjustment"));
+    }
+
+
     // Sets the height scale
     public void SetHeightScale(float heightScale)
     {

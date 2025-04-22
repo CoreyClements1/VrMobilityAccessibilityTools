@@ -1,10 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.XR.CoreUtils;
-using UnityEditor.Search;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class VMAT_HandController : MonoBehaviour
 {
@@ -16,7 +12,6 @@ public class VMAT_HandController : MonoBehaviour
 
 
     private Transform offsetTransform;
-    private Vector3 originPositionLocal;
 
     private bool useReachExtension = false;
     private float reachExtensionScale = 2f;
@@ -50,6 +45,11 @@ public class VMAT_HandController : MonoBehaviour
 
         if (useNormalization)
             HandleNormalization();
+    }
+
+    private void OnEnable()
+    {
+        ResetReachExtensionOrigin();
     }
 
 

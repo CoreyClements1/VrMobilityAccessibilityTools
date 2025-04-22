@@ -116,7 +116,8 @@ public class VMAT_Menu : MonoBehaviour
             Destroy(activeHighlighter.gameObject);
 
         // Find the visible portion (toggle, slider, button...) and attach highlighter
-        activeHighlighter = Instantiate(VMAT_InputManager.Instance.GetHighlighterPrefab(), selectable.transform);
+        VMAT_InputManager inpManager = FindObjectOfType<VMAT_InputManager>();
+        activeHighlighter = Instantiate(inpManager.GetHighlighterPrefab(), selectable.transform);
         activeHighlighter.transform.SetAsFirstSibling();
     }
 

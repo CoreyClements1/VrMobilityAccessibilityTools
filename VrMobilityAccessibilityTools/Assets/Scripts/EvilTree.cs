@@ -47,7 +47,7 @@ public class EvilTree : MonoBehaviour
 
     private void TestVelocityAndDamage(Collider other)
     {
-        if (VMAT_AccessibilityMenu.Instance != null && VMAT_AccessibilityMenu.Instance.normalizationEnabled)
+        if (VMAT_Options.Instance != null && VMAT_Options.Instance.normalizationEnabled)
         {
             Damage(true);
             return;

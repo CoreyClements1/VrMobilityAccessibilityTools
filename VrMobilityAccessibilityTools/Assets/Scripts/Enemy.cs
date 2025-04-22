@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
 
     private void TestVelocityAndDie(Collider other)
     {
-        if (VMAT_AccessibilityMenu.Instance != null && VMAT_AccessibilityMenu.Instance.normalizationEnabled)
+        if (VMAT_Options.Instance != null && VMAT_Options.Instance.normalizationEnabled)
         {
             StartCoroutine(Die());
             return;

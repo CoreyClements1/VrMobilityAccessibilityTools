@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: c3f602eccecd3b1488648cf663d2eee4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CemetaryNoVMAT.unity
     guid: 571c7212ce781a744940c7be372f8dbd
   - enabled: 1
