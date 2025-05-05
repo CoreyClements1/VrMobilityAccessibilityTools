@@ -5,20 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: c3f602eccecd3b1488648cf663d2eee4
   - enabled: 0
     path: Assets/Scenes/CemetaryNoVMAT.unity
     guid: 571c7212ce781a744940c7be372f8dbd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CemetaryVMAT.unity
     guid: 3d7600ca82afd9f409d7347fcb44fc14
+  - enabled: 1
+    path: Assets/Samples/WebXR Interactions/0.22.0/Sample Scene/Scenes/Desert.unity
+    guid: 85380d4847db7b74a850284461349c36
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9bec1ce6a03ccba4b9a8215241b32e63, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: a49cadc1a815591479693b955ccf08c1, type: 2}
+    WebXR.Settings: {fileID: 11400000, guid: 3e3803c3701f5144d8b617f5d9aae79a, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 985fdffee33a5944396199c6b7145dd4, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: a9a6963505ddf7f4d886008c6dc86122, type: 2}
