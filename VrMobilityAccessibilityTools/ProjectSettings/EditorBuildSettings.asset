@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: c3f602eccecd3b1488648cf663d2eee4
   - enabled: 0
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/CemetaryVMAT.unity
     guid: 3d7600ca82afd9f409d7347fcb44fc14
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/WebXR Interactions/0.22.0/Sample Scene/Scenes/Desert.unity
     guid: 85380d4847db7b74a850284461349c36
   m_configObjects:
