@@ -19,6 +19,7 @@ public class VMAT_InputManager : MonoBehaviour
     [SerializeField] private VMAT_Menu accessibilityMenu;
     [SerializeField] private VMAT_SoundsManager soundsManager;
     [SerializeField] private VMAT_Highlighter highlighterPrefab;
+    [SerializeField] private VMAT_Options vmatOptions;
     private InputActionMap actionMap;
 
     private InputActionReference openMenuAction;
@@ -62,21 +63,21 @@ public class VMAT_InputManager : MonoBehaviour
     {
         actionMap?.Enable();
 
-        openMenuAction = VMAT_Options.Instance.openMenuAction;
+        openMenuAction = vmatOptions.openMenuAction;
         if (openMenuAction != null)
         {
             openMenuAction.action.performed += OnSecondaryButton;
             openMenuAction.action.Enable();
         }
 
-        selectMenuItemAction = VMAT_Options.Instance.selectMenuItemAction;
+        selectMenuItemAction = vmatOptions.selectMenuItemAction;
         if (selectMenuItemAction != null)
         {
             selectMenuItemAction.action.performed += OnPrimaryButton;
             selectMenuItemAction.action.Enable();
         }
 
-        joystickNavigationAction = VMAT_Options.Instance.joystickNavigationAction;
+        joystickNavigationAction = vmatOptions.joystickNavigationAction;
         if (joystickNavigationAction != null)
         {
             joystickNavigationAction.action.performed += OnJoystick;

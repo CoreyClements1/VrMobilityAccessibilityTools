@@ -718,6 +718,7 @@ MonoBehaviour:
   accessibilityMenu: {fileID: 2766687095689995221}
   soundsManager: {fileID: 8319880785677754625}
   highlighterPrefab: {fileID: 8355649826498076894, guid: c030fee1f596f7b419d12e82ce2e2ec9, type: 3}
+  vmatOptions: {fileID: 8521354811466364625}
 --- !u!1 &1177627493650240454
 GameObject:
   m_ObjectHideFlags: 0
