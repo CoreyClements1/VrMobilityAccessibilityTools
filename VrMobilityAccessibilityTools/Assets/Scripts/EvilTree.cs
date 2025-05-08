@@ -98,6 +98,8 @@ public class EvilTree : MonoBehaviour
         deathParticles.Play();
         CompletionCanvas.Instance.OnObjDestroyed();
 
+        VERAFile_CleanTimes.CreateCsvEntry(0, "Tree", transform);
+
         evilMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
         yield return new WaitForSeconds(.1f);
         goodMesh.LeanScale(Vector3.one, .5f).setEaseOutExpo();

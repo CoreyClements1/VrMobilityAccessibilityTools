@@ -166,6 +166,9 @@ public class CompletionCanvas : MonoBehaviour
         WinCanvas.Instance.FadeOut();
         SceneLoader.Instance.ManualSetIsLoading(true);
 
+        VERAFile_StartAndEnd.CreateCsvEntry(1);
+        VERALogger.Instance.FinalizeSession();
+
         yield return new WaitForSeconds(5f);
 
         WinCanvas.Instance.FadeJustText();

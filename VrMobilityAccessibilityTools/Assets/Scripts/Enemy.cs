@@ -169,9 +169,15 @@ public class Enemy : MonoBehaviour
         });
 
         if (enemyType == EnemyType.Bat)
+        {
+            VERAFile_CleanTimes.CreateCsvEntry(0, "Bat", transform);
             yield return new WaitForSeconds(.5f);
+        }
         else
+        {
+            VERAFile_CleanTimes.CreateCsvEntry(0, "Spider", transform);
             yield return null;
+        }
 
         enemyMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
         deathParticles.Play();

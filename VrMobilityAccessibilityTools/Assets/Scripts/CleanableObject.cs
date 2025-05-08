@@ -94,6 +94,22 @@ public class CleanableObject : MonoBehaviour
 
         deathParticles.Play();
 
+        switch (cleanableType)
+        {
+            case CleanableType.Shovel:
+                VERAFile_CleanTimes.CreateCsvEntry(0, "Mushroom", transform);
+                break;
+            case CleanableType.Broom:
+                VERAFile_CleanTimes.CreateCsvEntry(0, "Dust", transform);
+                break;
+            case CleanableType.Axe:
+                VERAFile_CleanTimes.CreateCsvEntry(0, "Pumpkin", transform);
+                break;
+            case CleanableType.Pickaxe:
+                VERAFile_CleanTimes.CreateCsvEntry(0, "Grave", transform);
+                break;
+        }
+
         if (replaceOnDie)
         {
             replacementMesh.LeanScale(Vector3.one, .5f).setEaseOutExpo();
