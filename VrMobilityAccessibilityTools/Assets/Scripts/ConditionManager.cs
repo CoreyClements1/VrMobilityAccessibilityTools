@@ -14,42 +14,51 @@ public class ConditionManager : MonoBehaviour
     void Start()
     {
 #if VERAConditionGroup_Distractions
-    if (VERAConditionGroup_Distractions.HandMaterialIndex.value == 0)
+        VERAConditionGroup_Distractions.HandMaterialIndex.GetValueAsync((int value) =>
         {
-            leftHandRenderer.material = ghostHandMaterial;
-            rightHandRenderer.material = ghostHandMaterial;
-        }
-        else
+            if (value == 0)
+            {
+                leftHandRenderer.material = ghostHandMaterial;
+                rightHandRenderer.material = ghostHandMaterial;
+            }
+            else
+            {
+                leftHandRenderer.material = standardHandMaterial;
+                rightHandRenderer.material = standardHandMaterial;
+            }
+        });
+        
+        VERAConditionGroup_Distractions.HatEnabled.GetValueAsync((bool value) =>
         {
-            leftHandRenderer.material = standardHandMaterial;
-            rightHandRenderer.material = standardHandMaterial;
-        }
-
-        if (VERAConditionGroup_Distractions.HatEnabled.value)
-        {
-            hat.SetActive(true);
-        } 
-        else 
-        {
-            hat.SetActive(false);
-        }
+            if (value)
+            {
+                hat.SetActive(true);
+            }
+            else
+            {
+                hat.SetActive(false);
+            }
+        });
 #endif
 
 #if VERAConditionGroup_Arachnophobia
-        if (VERAConditionGroup_Arachnophobia.SpidersEnabled.value)
+        VERAConditionGroup_Arachnophobia.SpidersEnabled.GetValueAsync((bool value) =>
         {
-            foreach (GameObject spider in spiders)
+            if (value)
             {
-                spider.SetActive(true);
+                foreach (GameObject spider in spiders)
+                {
+                    spider.SetActive(true);
+                }
             }
-        } 
-        else 
-        {
-            foreach (GameObject spider in spiders)
+            else
             {
-                spider.SetActive(false);
+                foreach (GameObject spider in spiders)
+                {
+                    spider.SetActive(false);
+                }
             }
-        }
-#endif
+        });
+        #endif
     }
 }

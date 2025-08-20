@@ -90,6 +90,10 @@ public class CleanableObject : MonoBehaviour
     {
         dead = true;
 
+#if VERAFile_Interactions
+        VERAFile_Interactions.CreateCsvEntry(2, "DestroyObject", gameObject.name, transform);
+        #endif
+
         grassMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();
 
         deathParticles.Play();

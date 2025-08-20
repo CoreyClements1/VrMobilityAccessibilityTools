@@ -124,6 +124,9 @@ public class CompletionCanvas : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        #if VERAFile_Checkpoints
+        VERAFile_Checkpoints.CreateCsvEntry(2, "Quit");
+        #endif
         ResetAtmostphere();
     }
 
@@ -161,6 +164,10 @@ public class CompletionCanvas : MonoBehaviour
 
     private IEnumerator WinCo()
     {
+        #if VERAFile_Checkpoints
+        VERAFile_Checkpoints.CreateCsvEntry(1, "Win");
+#endif
+        
         updatingAtmosphere = false;
 
         WinCanvas.Instance.FadeOut();

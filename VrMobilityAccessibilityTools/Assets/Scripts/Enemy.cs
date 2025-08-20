@@ -159,6 +159,10 @@ public class Enemy : MonoBehaviour
     {
         dead = true;
 
+        #if VERAFile_Interactions
+        VERAFile_Interactions.CreateCsvEntry(3, "DestroyEnemy", gameObject.name, transform);
+        #endif
+
         col.enabled = false;
         enemyAnimator.SetBool("Dead", true);
         SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Ouch, transform.position, false);

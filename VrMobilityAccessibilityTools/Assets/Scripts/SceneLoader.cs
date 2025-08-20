@@ -111,6 +111,10 @@ public class SceneLoader : MonoBehaviour
         else
         {
             GraveyardXr.Instance.transform.position = new Vector3(0.587f, 0.344f, 5.532f);
+
+            #if VERAFile_Checkpoints
+            VERAFile_Checkpoints.CreateCsvEntry(0, "Start");
+            #endif
         }
 
         SceneManager.MoveGameObjectToScene(GraveyardXr.Instance.gameObject, scene);
