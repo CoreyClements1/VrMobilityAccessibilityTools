@@ -61,7 +61,7 @@ public class PumpkinCannonball : MonoBehaviour
 
         cannonballMeshFilter.transform.LeanScale(Vector3.zero, .2f).setEaseOutExpo();
         hitParticles.Play();
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.isKinematic = true;
         col.enabled = false;
 

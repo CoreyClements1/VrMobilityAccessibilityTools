@@ -46,7 +46,7 @@ public class Cannon : MonoBehaviour
         GameObject cannonball = Instantiate(pumpkinCannonballPrefab, pumpkinSpawnPos.position, pumpkinSpawnPos.rotation);
         SfxManager.Instance.PlaySfx(SfxManager.SoundEffect.Fire, transform.position, true);
         Rigidbody rb = cannonball.GetComponent<Rigidbody>();
-        rb.velocity = pumpkinSpawnPos.forward * fireForce;
+        rb.linearVelocity = pumpkinSpawnPos.forward * fireForce;
         firingParticleSystem.Play();
         StopCoroutine(WaitThenStopParticles());
         StartCoroutine(WaitThenStopParticles());
