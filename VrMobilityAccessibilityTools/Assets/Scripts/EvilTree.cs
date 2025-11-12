@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VERA;
 
 public class EvilTree : MonoBehaviour
 {
@@ -92,6 +93,10 @@ public class EvilTree : MonoBehaviour
 
     private IEnumerator Die()
     {
+#if VERAFile_SpecialEvents
+        VERAFile_SpecialEvents.CreateCsvEntry(6, "EnemyKilled", gameObject.name, transform);
+        #endif
+        
         dead = true;
         GetComponent<Collider>().enabled = false;
 

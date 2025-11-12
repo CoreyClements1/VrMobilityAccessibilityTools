@@ -176,4 +176,17 @@ public class CompletionCanvas : MonoBehaviour
     #endregion
 
 
+    #region DEMO
+
+
+    private IEnumerator DisplayDemoDoneCo()
+    {
+        DemoDoneCanvas.Instance.ShowDemoDone();
+        yield return null;
+    }
+
+
+    #endregion
+
+
 }

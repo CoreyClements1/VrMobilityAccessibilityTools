@@ -282,6 +282,14 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.textmeshpro": {
+      "version": "3.0.6",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0"
+      }
+    },
     "com.unity.timeline": {
       "version": "1.8.7",
       "depth": 0,
@@ -380,6 +388,18 @@
         "com.unity.xr.legacyinputhelpers": "2.1.2"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.vera.vera": {
+      "version": "file:D:/VERA/vera-template/Packages/VERA",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.inputsystem": "1.7.0",
+        "com.unity.textmeshpro": "3.0.6",
+        "com.unity.xr.interaction.toolkit": "3.0.3",
+        "com.unity.xr.management": "4.4.0",
+        "com.unity.xr.oculus": "4.2.0"
+      }
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

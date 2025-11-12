@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5230143104655565387}
   - component: {fileID: 4754608828829146692}
   - component: {fileID: 1235030315422038930}
+  - component: {fileID: 1143007815289351344}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Cannon
@@ -95,6 +96,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -307,6 +311,18 @@ MonoBehaviour:
   pumpkinSpawnPos: {fileID: 5063259118547050790}
   fireForce: 10
   firingParticleSystem: {fileID: 51508152517796875}
+--- !u!114 &1143007815289351344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8352939400063537830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3388ff0f78f09d349b2fde636460bcb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6737852457210988893
 PrefabInstance:
   m_ObjectHideFlags: 0

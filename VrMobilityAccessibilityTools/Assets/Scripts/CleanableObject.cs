@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using VERA;
 
 public class CleanableObject : MonoBehaviour
 {
@@ -88,6 +89,10 @@ public class CleanableObject : MonoBehaviour
 
     private void Die(bool replaceOnDie)
     {
+        #if VERAFile_SpecialEvents
+        VERAFile_SpecialEvents.CreateCsvEntry(5, "ObjectCleaned", gameObject.name, transform);
+        #endif
+        
         dead = true;
 
         grassMesh.LeanScale(Vector3.zero, .5f).setEaseOutExpo();

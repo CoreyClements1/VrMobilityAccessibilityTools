@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using VERA;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -22,6 +23,22 @@ public class SceneLoader : MonoBehaviour
         }
 
         Instance = this;
+
+        if (VERASessionManager.initialized)
+        {
+            LogStart();
+        }
+        else
+        {
+            VERASessionManager.onInitialized.AddListener(LogStart);
+        }
+    }
+
+    private void LogStart()
+    {
+        #if VERAFile_SpecialEvents
+        VERAFile_SpecialEvents.CreateCsvEntry(0, "Progression", "Loaded", transform);
+        #endif
     }
 
     private void OnEnable()
@@ -58,6 +75,10 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(string sceneToLoad)
     {
+#if VERAFile_SpecialEvents
+        VERAFile_SpecialEvents.CreateCsvEntry(1, "SceneChange", sceneToLoad, transform);
+        #endif
+        
         LoadScene(sceneToLoad, false);
     }
 
@@ -112,6 +133,10 @@ public class SceneLoader : MonoBehaviour
         {
             GraveyardXr.Instance.transform.position = new Vector3(0.587f, 0.344f, 5.532f);
         }
+
+        #if VERAFile_SpecialEvents
+        VERAFile_SpecialEvents.CreateCsvEntry(0, "Progression", "GraveyardStart", transform);
+        #endif
 
         SceneManager.MoveGameObjectToScene(GraveyardXr.Instance.gameObject, scene);
     }
