@@ -35,12 +35,10 @@ public class DemoDoneCanvas : MonoBehaviour
         }
 
         Instance = this;
-
-        StartCoroutine(WaitThenDemoDone());
     }
 
 
-    private IEnumerator WaitThenDemoDone()
+    public IEnumerator WaitThenDemoDone()
     {
         yield return new WaitForSeconds(30f);
 
